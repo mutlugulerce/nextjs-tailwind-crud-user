@@ -28,7 +28,10 @@ export const createUser = createAsyncThunk('users/createUser' , async(user) => {
 })
 
 
-
+export const deleteUser = createAsyncThunk('users/deleteUser', async(id) => {
+    await axios.delete(`${BASE_URL}/users/${id}`)
+    return id;
+})
 
 export const userSlice = createSlice({
     name: 'users',
@@ -61,6 +64,20 @@ export const userSlice = createSlice({
             state.users= [];
             state.error= 'Could not create user'
         });
+        builder.addCase(deleteUser.pending, (state) => {
+            state.loading = true;
+          });
+
+      builder.addCase(deleteUser.fulfilled, (state,action) => {
+        state.loading= false;
+        state.error= ''
+        state.users= state.users.filter((user) => user.id !== action.payload);
+      })
+          builder.addCase(deleteUser.rejected, (state) => {
+            state.loading = false;
+            state.error = "Could not delete user";
+          });
+      
     }
 })
 
