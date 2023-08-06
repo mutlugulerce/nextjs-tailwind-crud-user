@@ -19,6 +19,14 @@ export const fetchUser = createAsyncThunk('users/fetchUsers',async () => {
 } )
 
 
+export const createUser = createAsyncThunk('users/createUser' , async(user) => {
+   return axios.post(`${BASE_URL}/users`, {
+    name: user.name,
+    email:user.email,
+   })
+   .then((response) => response.data)
+})
+
 
 
 
@@ -39,7 +47,20 @@ export const userSlice = createSlice({
             state.loading;
             state.users= [];
             state.error= 'Yüklenemedi'
-        })
+        });
+        builder.addCase(createUser.pending, (state) => {
+            state.loading= true;
+        });
+        builder.addCase(createUser.fulfilled, (state,action) => {
+            state.loading= false;
+            state.error='';
+            state.users= [...state.users, action.payload];
+        });
+        builder.addCase(createUser.rejected, (state) => {
+            state.loading;
+            state.users= [];
+            state.error= 'Could not create user'
+        });
     }
 })
 
