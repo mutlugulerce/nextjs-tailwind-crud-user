@@ -31,6 +31,25 @@ export const createUser = createAsyncThunk('users/createUser' , async(user) => {
 export const deleteUser = createAsyncThunk('users/deleteUser', async(id) => {
     await axios.delete(`${BASE_URL}/users/${id}`)
     return id;
+});
+
+export const updateUser =createAsyncThunk('users/updateUser' , async(user) => {
+try {
+    const response = await axios.put(`${BASE_URL}/users/${user.id}` , {
+        name: user.name,
+        email: user.email
+    },
+
+    {
+        headers:{
+            "Content-type": "application/json; charset=UTF-8",
+        }
+    })
+
+    return response.data;
+} catch (error) {
+    throw new Error("Could not update user");
+}
 })
 
 export const userSlice = createSlice({
@@ -76,6 +95,21 @@ export const userSlice = createSlice({
           builder.addCase(deleteUser.rejected, (state) => {
             state.loading = false;
             state.error = "Could not delete user";
+          });
+          builder.addCase(updateUser.pending, (state) => {
+            state.loading = true;
+          });
+         builder.addCase(updateUser.fulfilled, (state,action) => {
+            state.loading= false;
+            state.error='';
+            state.users= state.users.map((user) => user.id === action.payload.id ? {
+                ...user , ...action.payload
+            } : user)
+         });
+         
+         builder.addCase(updateUser.rejected, (state) => {
+            state.loading = false;
+            state.error = "Could not update user";
           });
       
     }

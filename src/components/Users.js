@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { deleteUser } from "../features/userSlice";
+import { deleteUser, updateUser } from "../features/userSlice";
 import { useDispatch } from "react-redux";
 
 
 const Users = ({ name, email, id }) => {
 const dispatch= useDispatch();
 const [isModalOpen,setIsOpenModal] = useState(false);
+const [isEditing,setIsEditing] =useState(false);
 
 const handleOpenView = () => {
   setIsOpenModal(true)
@@ -19,19 +20,49 @@ const handleCloseView = () => {
 const handleDelete = () => {
 dispatch(deleteUser(id))
 }
+
+const handleIsEditing = () => {
+  setIsEditing(true)
+}
+
+const handleOnEditSubmit = (e) => {
+  e.preventDefault();
+  const nameValue = e.target.name.value;
+  const emailValue = e.target.email.value;
+
+  dispatch(updateUser({id, name: nameValue, email:emailValue}));
+  setIsEditing(false);
+} 
+
   return (
 
     <div>
+    {isEditing ? (
+
+     <form  onSubmit={handleOnEditSubmit}>
+      <input
+      placeholder="Name"
+      name="name"
+      defaultValue={name}
+      />
+
+      <input  placeholder="email" name="email" defaultValue={email} />
+
+      <button  onSubmit={handleOnEditSubmit}>Edit</button>
+     </form>
+
+    ) : (
+
     <div>
       <h2>{name}</h2>
       <h2>{email}</h2>
 
       <div>
         <button onClick={handleOpenView}>View</button>
-        <button>Edit</button>
+        <button onClick={handleIsEditing}>Edit</button>
         <button onClick={handleDelete}>Delete</button>
       </div>
-    </div>
+    </div> )}
 
     {isModalOpen && (
 
