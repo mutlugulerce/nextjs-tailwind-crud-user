@@ -16,8 +16,7 @@ export default function Home() {
 
   return (
     <div className="flex  flex-col  justify-center  w-full h-screen">
-      <div className="flex flex-col items-center justify-center mb-8 space-y-6">
-        <h2>Create New User</h2>
+      <div className="flex flex-col items-center justify-center mb-2 mt-8">
         <AddUser />
       </div>
 

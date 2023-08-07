@@ -38,33 +38,48 @@ const Users = ({ name, email, id }) => {
       {isEditing ? (
         <form
           onSubmit={handleOnEditSubmit}
-          className="w-full my-2 flex justify-around border-y-2 border-green-400"
+          className="w-full my-2 flex justify-around border-y-2 border-green-700"
         >
-          <input placeholder="Name" name="name" defaultValue={name} />
+          <input
+            placeholder="Name"
+            name="name"
+            defaultValue={name}
+            className="w-1/4 font-semibold pl-2 bg-pink-500 text-white"
+          />
 
-          <input placeholder="email" name="email" defaultValue={email} />
+          <input
+            placeholder="email"
+            name="email"
+            defaultValue={email}
+            className="w-1/4 font-semibold pl-2 bg-pink-500 text-white"
+          />
 
           <button
-            className="bg-green-700 text-white "
+            className="bg-green-700 text-white py-2 px-3"
             onSubmit={handleOnEditSubmit}
           >
             Edit
           </button>
         </form>
       ) : (
-        <div className="w-full border-y-2 flex items-start justify-between px-4 space-y-1">
-          <h2 className="capitalize">{name}</h2>
-          <h2>{email}</h2>
+        <div className="w-full border-y-2 border-blue-300 flex items-start justify-between px-4 space-y-1">
+          <div>
+            <h2 className="capitalize">{name}</h2>
+          </div>
+
+          <div className="flex items-start justify-center ">
+            <h2 className="text-start ">{email}</h2>
+          </div>
 
           <div className="space-x-2">
             <Button
               title="View"
-              handleClick={handleView}
+              handleClick={handleOpenView}
               styleContainer={"bg-black text-white px-4 py-2 "}
             />
             <Button
               title="Edit"
-              handleClick={handleEdit}
+              handleClick={handleIsEditing}
               styleContainer={"bg-blue-600 text-white px-4 py-2 "}
             />
             <Button
